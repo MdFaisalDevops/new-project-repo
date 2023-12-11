@@ -1,17 +1,11 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+FROM node:14
 
-# Set the working directory to /app
-WORKDIR /app
+WORKDIR /usr/src/app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Define environment variable
-ENV NAME World
+COPY package.json .
+RUN npm install 
+COPY . .
 
 EXPOSE 3000
 
-# Run app.py when the container launches
-CMD ["python", "app.py"]
-
+CMD ["node", "index.js"]
