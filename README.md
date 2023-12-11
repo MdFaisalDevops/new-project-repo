@@ -1,47 +1,52 @@
-# new-project-repo
-Docker Security Best Practices:
-Use Official Base Images:
-Always use official and well-maintained base images from trusted sources like Docker Hub. They are regularly updated and maintained for security patches.
+# Hello World Docker Image CI/CD with GitHub Actions and AWS ECR
 
-Minimize Image Layers:
-Reduce the number of layers in your Docker image to minimize attack surfaces and improve security. Each layer increases the potential attack vectors.
+This repository demonstrates a simple CI/CD setup using GitHub Actions to build a Docker image for a Hello World application and push it to AWS Elastic Container Registry (ECR).
 
-Scan for Vulnerabilities:
-Use container scanning tools like Clair, Trivy, or Anchore to identify and fix vulnerabilities in your Docker images.
+## Prerequisites
 
-Apply the Principle of Least Privilege:
-Run your containers with the least amount of privileges necessary. Avoid running processes as root, and use non-root users where possible.
+Before replicating this setup, ensure you have the following:
 
-Use COPY Instead of ADD:
-Prefer the COPY instruction over ADD unless you need the additional features of ADD. This reduces the risk of unintended side effects.
+- An AWS account with the necessary permissions to create and manage ECR repositories.
+- AWS Access Key ID and Secret Access Key stored as GitHub Secrets (named `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`).
+- The ECR repository URL stored as a GitHub Secret (named `AWS_ECR_REGISTRY_URL`).
+- Docker installed locally.
 
-Secure Your Docker Daemon:
-Configure your Docker daemon to use TLS to secure communication between Docker CLI and the daemon. Limit the Docker daemon's exposure to the network.
+## Workflow Overview
 
-Enable Content Trust:
-Enable Docker Content Trust (DOCKER_CONTENT_TRUST=1). This ensures that only signed images are used, reducing the risk of image tampering.
+The GitHub Actions workflow defined in `.github/workflows/docker-ecr.yml` does the following:
 
-GitHub Actions Security Best Practices:
-Use Secrets for Sensitive Information:
-Store sensitive information such as API keys, access tokens, and passwords using GitHub Secrets. Never expose sensitive information directly in your workflow files.
+1. **Build Docker Image:**
+   - Uses Docker Buildx to build a multi-stage Docker image.
+   - Utilizes caching for faster builds.
 
-Restrict Access to Secrets:
-Limit access to secrets by providing the minimum required permissions. Only authorized users or workflows should have access to sensitive information.
+2. **Push Docker Image to AWS ECR:**
+   - Authenticates with AWS ECR using the provided credentials stored as secrets.
+   - Pushes the Docker image to the specified ECR repository.
 
-Use Encrypted Secrets in Workflows:
-Avoid printing sensitive information directly in logs. Use expressions like secrets.MY_SECRET to access secrets in workflows.
+## How to Replicate
 
-Regularly Review Access Permissions:
-Periodically review and audit who has access to the repository, especially access to secrets. Remove unnecessary access.
+1. **Fork this Repository:**
+   - Fork this repository to your own GitHub account.
 
-Implement Code Scanning:
-Leverage GitHub's code scanning feature to automatically find vulnerabilities in your codebase. Use security tools like CodeQL to identify and address security issues.
+2. **Configure GitHub Secrets:**
+   - In your forked repository, go to `Settings` -> `Secrets`.
+   - Add the following secrets:
+     - `AWS_ACCESS_KEY_ID`: Your AWS Access Key ID.
+     - `AWS_SECRET_ACCESS_KEY`: Your AWS Secret Access Key.
+     - `AWS_ECR_REGISTRY_URL`: The URL of your AWS ECR registry.
 
-Enable Dependabot:
-Enable GitHub Dependabot to automatically create pull requests to update dependencies when security vulnerabilities are found.
+3. **Trigger GitHub Actions Workflow:**
+   - Make any changes to the repository or trigger a new commit.
+   - Observe the GitHub Actions workflow running under the `Actions` tab.
 
-Keep GitHub Actions Updated:
-Regularly update GitHub Actions and associated dependencies to benefit from the latest security patches and improvements.
+4. **View Workflow Logs:**
+   - Click on the workflow run to view detailed logs and see the progress of each step.
 
-Implement Branch Protection:
-Use branch protection rules to prevent force pushes and require reviews before merging. This helps prevent accidental or malicious changes to your codebase.
+## Additional Notes
+
+- This is a simple example, and you may need to customize the Dockerfile or workflow to fit your application's requirements.
+- Make sure to adapt the AWS ECR repository name and Dockerfile according to your project.
+
+Feel free to customize this setup based on your specific needs. If you encounter any issues, refer to GitHub Actions logs and AWS ECR documentation for troubleshooting.
+
+Happy coding!
