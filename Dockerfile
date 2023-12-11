@@ -10,6 +10,8 @@ COPY . /app
 # Define environment variable
 ENV NAME World
 
+EXPOSE 3000
+
 # Run app.py when the container launches
 CMD ["python", "app.py"]
 
